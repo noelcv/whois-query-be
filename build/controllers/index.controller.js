@@ -24,4 +24,5 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const home = __importStar(require("./home.controller"));
-exports.default = { home };
+const whois = __importStar(require("./whois.controller"));
+exports.default = { home, whois };

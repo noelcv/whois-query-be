@@ -1,3 +1,3 @@
 import * as home from './home.controller';
-
-export default {home}
+import * as whois from './whois.controller';
+export default {home, whois}
