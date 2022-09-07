@@ -12,10 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.lookUp = void 0;
+exports.addLog = exports.lookUp = void 0;
 const net_1 = __importDefault(require("net"));
 const validateSld_util_1 = require("./controller.utils/validateSld.util");
 const validateTld_util_1 = require("./controller.utils/validateTld.util");
+const query_model_1 = __importDefault(require("../models/query.model"));
 function lookUp(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -33,8 +34,13 @@ function lookUp(req, res) {
                 });
                 client.on('data', (data) => {
                     const result = data.toString();
-                    console.log('🟢 Resolved Result: ', result);
                     res.send(result);
+                    //TODO: Send result to DB
+                    const payload = {
+                        domainName: domain,
+                        log: result,
+                    };
+                    addLog(payload);
                     client.destroy();
                 });
                 client.on('error', (err) => {
@@ -65,3 +71,18 @@ function lookUp(req, res) {
     });
 }
 exports.lookUp = lookUp;
+function addLog(payload) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            console.log('payload inside addLog: ', payload);
+            const data = yield query_model_1.default.create(payload);
+            console.log(data, 'data inside addLog');
+            if (data)
+                console.log('🚀 Log added to DB', data);
+        }
+        catch (err) {
+            console.log('Error storing the query log to database', err);
+        }
+    });
+}
+exports.addLog = addLog;
