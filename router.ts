@@ -5,5 +5,6 @@ const router = Router();
 
 router.get("/", controllers.home.getHome);
 router.get("/whois", controllers.whois.lookUp)
+router.post("/whois", controllers.whois.addLog)
 
 export default router;

@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import net from 'net';
 import { validateSld } from './controller.utils/validateSld.util';
 import { validateTld } from './controller.utils/validateTld.util';
+import QueryModel from '../models/query.model';
 
 export async function lookUp(req: Request, res: Response) {
   try {
@@ -23,8 +24,15 @@ export async function lookUp(req: Request, res: Response) {
 
       client.on('data', (data) => {
         const result = data.toString();
-        console.log('🟢 Resolved Result: ', result);
         res.send(result);
+     
+        const payload = {
+          domainName: domain,
+          log: result,
+        };
+        
+        addLog(payload);
+        res.status(200);
         client.destroy();
       });
 
@@ -51,5 +59,22 @@ export async function lookUp(req: Request, res: Response) {
   } catch (err) {
     console.log(' ❌ Error at lookup Controller: ', err);
     res.status(500);
+  }
+}
+
+//TODO: move this to a types directory
+type LogRecord = {
+  domainName: string;
+  log: string;
+};
+
+export async function addLog(payload: LogRecord) {
+  try {
+    console.log('payload inside addLog: ', payload);
+    const data = await QueryModel.create(payload);
+    console.log(data, 'data inside addLog');
+    if (data) console.log('🚀 Log added to DB', data);
+  } catch (err) {
+    console.log('Error storing the query log to database', err);
   }
 }
