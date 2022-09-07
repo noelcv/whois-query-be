@@ -25,10 +25,10 @@ export async function lookUp(req: Request, res: Response) {
       client.on('data', (data) => {
         const result = data.toString();
         res.send(result);
-     
+
         const payload = {
           domainName: domain,
-          log: result,
+          logRecord: result,
         };
         
         addLog(payload);
@@ -41,7 +41,7 @@ export async function lookUp(req: Request, res: Response) {
       });
     } else if (!isValidSld && !isValidTld) {
       res.send(
-        `❌ You are a troll! "${sld}.${tld}" is not a valid input (and you probably know it...)`
+        `❌ You are a troll! 🧌🧌🧌 "${sld}.${tld}" is not a valid input (and you probably know it...)`
       );
       res.status(400);
     } else if (!isValidSld) {
@@ -65,15 +65,13 @@ export async function lookUp(req: Request, res: Response) {
 //TODO: move this to a types directory
 type LogRecord = {
   domainName: string;
-  log: string;
+  logRecord: string;
 };
 
 export async function addLog(payload: LogRecord) {
   try {
-    console.log('payload inside addLog: ', payload);
     const data = await QueryModel.create(payload);
-    console.log(data, 'data inside addLog');
-    if (data) console.log('🚀 Log added to DB', data);
+    if (data) console.log('✅ Log record added to DB');
   } catch (err) {
     console.log('Error storing the query log to database', err);
   }
