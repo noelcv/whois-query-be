@@ -17,16 +17,18 @@ const net_1 = __importDefault(require("net"));
 function lookUp(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const sld = 'google';
-            const tld = 'com';
+            const sld = 'careers..centralnicgroup';
+            const tld = 'xyz';
+            const isValidSld = validateSld(sld);
+            const isValidTld = validateTld(tld);
             // const sld = req.body.sld;
             // const tld = req.body.tld;
-            if (tld === 'com' || tld === 'net') {
+            if (isValidSld && isValidTld) {
                 const domain = `${sld}.${tld}`;
                 const queryPacket = `${domain}\r\n`;
                 const host = 'whois.verisign-grs.com';
                 const client = new net_1.default.Socket();
-                client.connect(43, host, () => {
+                yield client.connect(43, host, () => {
                     console.log('client connected to whois server: ', client);
                     client.write(queryPacket);
                 });
@@ -38,11 +40,20 @@ function lookUp(req, res) {
                     client.destroy();
                 });
                 client.on('error', (err) => {
-                    console.log('❌ Error: ', err);
+                    console.log('❌ Error connecting to whois server: ', err);
                 });
             }
+            else if (!isValidSld && !isValidTld) {
+                res.send(`❌ You are a troll and your inputs ${sld}.${tld} are totally invalid and you know it.`);
+            }
+            else if (!isValidSld) {
+                res.send(`❌ Invalid SLD: ${sld}`);
+            }
+            else if (!isValidTld) {
+                res.send(`❌ Invalid TLD: ${tld}`);
+            }
             else {
-                res.send('TLD not supported');
+                res.send('Domain not supported');
             }
         }
         catch (err) {
@@ -52,3 +63,23 @@ function lookUp(req, res) {
     });
 }
 exports.lookUp = lookUp;
+/*
+DNS names can contain only alphabetical characters (A-Z), numeric characters (0-9), the minus sign (-), and the period (.).
+Period characters are allowed only when they are used to delimit the components of domain style name
+*/
+function validateSld(sld) {
+    let regex = new RegExp(/^(?!\.)(?!.*\.$)(?!.*\.\.)[a-zA-Z0-9.]+$/);
+    /**
+     * ^(?!\.) -- negative look ahead to make sure the first character is not a period
+     * (?!.*\.$) -- last character is not a period
+     * (?!.*\.\.) -- make sure there are not two periods in a row
+     * [a-zA-Z0-9-.]+$ -- only allow letters, numbers, periods, and hyphens
+     */
+    let isValidInput = regex.test(sld);
+    let hasValidLength = sld.length > 0 && sld.length < 64;
+    return isValidInput && hasValidLength ? true : false;
+}
+/*only allow for .com and .net*/
+function validateTld(tld) {
+    return tld === 'com' || tld === 'net' ? true : false;
+}
