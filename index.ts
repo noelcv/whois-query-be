@@ -10,8 +10,8 @@ const PORT = process.env.PORT || 3001;
 const app = Express();
 app.use(cors());
 app.use(morgan("dev"));
-app.use(router)
 app.use(Express.json());
+app.use(router)
 
 
 
