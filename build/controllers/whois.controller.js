@@ -20,8 +20,10 @@ const query_model_1 = __importDefault(require("../models/query.model"));
 function lookUp(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const sld = req.body.sld;
-            const tld = req.body.tld;
+            const sld = req.query.sld;
+            const tld = req.query.tld;
+            console.log('sld from Client: ', sld);
+            console.log('tld from Client: ', tld);
             const isValidSld = (0, validateSld_util_1.validateSld)(sld);
             const isValidTld = (0, validateTld_util_1.validateTld)(tld);
             if (isValidSld && isValidTld) {
@@ -34,13 +36,14 @@ function lookUp(req, res) {
                 });
                 client.on('data', (data) => {
                     const result = data.toString();
+                    console.log(result, 'result');
                     res.send(result);
-                    //TODO: Send result to DB
                     const payload = {
                         domainName: domain,
-                        log: result,
+                        logRecord: result,
                     };
                     addLog(payload);
+                    res.status(200);
                     client.destroy();
                 });
                 client.on('error', (err) => {
@@ -48,7 +51,7 @@ function lookUp(req, res) {
                 });
             }
             else if (!isValidSld && !isValidTld) {
-                res.send(`❌ You are a troll! "${sld}.${tld}" is not a valid input (and you probably know it...)`);
+                res.send(`❌ You are a troll! 🧌🧌🧌 "${sld}.${tld}" is not a valid input (and you probably know it...)`);
                 res.status(400);
             }
             else if (!isValidSld) {
@@ -74,11 +77,9 @@ exports.lookUp = lookUp;
 function addLog(payload) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            console.log('payload inside addLog: ', payload);
             const data = yield query_model_1.default.create(payload);
-            console.log(data, 'data inside addLog');
             if (data)
-                console.log('🚀 Log added to DB', data);
+                console.log('✅ Log record added to DB');
         }
         catch (err) {
             console.log('Error storing the query log to database', err);

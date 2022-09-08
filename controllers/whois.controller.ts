@@ -6,8 +6,12 @@ import QueryModel from '../models/query.model';
 
 export async function lookUp(req: Request, res: Response) {
   try {
-    const sld = req.body.sld;
-    const tld = req.body.tld;
+    const sld = req.query.sld as string;
+    const tld = req.query.tld as string;
+    
+    console.log('sld from Client: ', sld);
+    console.log('tld from Client: ', tld);
+   
     const isValidSld = validateSld(sld);
     const isValidTld = validateTld(tld);
 
@@ -24,6 +28,7 @@ export async function lookUp(req: Request, res: Response) {
 
       client.on('data', (data) => {
         const result = data.toString();
+        console.log(result, 'result')
         res.send(result);
 
         const payload = {

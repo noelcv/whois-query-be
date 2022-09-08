@@ -17,7 +17,7 @@ app.use(express_1.default.json());
 app.use(router_1.default);
 app.listen(PORT, () => {
     try {
-        console.log(`🚀Server is running at http://localhost:${PORT}`);
+        console.log(`🚀 Server is running at http://localhost:${PORT}`);
     }
     catch (err) {
         console.error("❌ Error launching server: ", err);

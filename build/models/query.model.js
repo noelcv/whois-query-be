@@ -7,7 +7,7 @@ const index_model_1 = __importDefault(require("./index.model"));
 const Schema = index_model_1.default.Schema;
 const querySchema = new Schema({
     domainName: { type: String },
-    log: { type: String },
+    logRecord: { type: String },
 }, { timestamps: true });
 // const querySchema = new Schema({
 //   domainName: {type: String},
