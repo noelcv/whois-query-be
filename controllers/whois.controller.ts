@@ -29,7 +29,7 @@ export async function lookUp(req: Request, res: Response) {
       client.on('data', (data) => {
         const result = data.toString();
         console.log(result, 'result')
-        res.send(result);
+        res.send(JSON.stringify(result));
 
         const payload = {
           domainName: domain,
