@@ -12,12 +12,17 @@ Back-end repository for a WhoisQuery Application.
 
 
 ## Security considerations
-
-
   
 ### No external libraries to perform Whois queries
 To reduce vulnerabilities associated with external dependencies in the core service of the application, we relied solely on the default NET module from NodeJS, which provides an asynchronous network API for creating stream-based TCP servers.
 
+### CORS Policy
+
+We define environment variables for allowedOrigins and pass them as options on CORS middleware to verify the requests are coming from trusted origins. 
+
+On Heroku, we safely store those environment variables to be accessed in PRODUCTION.
+
+Moreover, we also define the HTTP Request methods to be allowed - for now, only GET requests are allowed, given that we are only storing queries logs on the database.
 ### Server-side sanitization: 
 We validate the payload from the client against REGEX patterns to match the following conditions: 
     - The domain name shall have between 1 and 63 characters.
