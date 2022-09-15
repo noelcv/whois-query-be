@@ -10,8 +10,6 @@ const CONTENT_SECURITY_POLICY: object = {
     fontSrc: ["'self'"],
     sandbox: ["allow-forms", "allow-scripts"],
     reportUri: "/report-violation",
-    objectSrc: ["'none'"],
-    upgradeInsecureRequests: [],
   },
   reportOnly: true,
 }
