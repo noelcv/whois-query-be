@@ -12,7 +12,7 @@ Back-end repository for a WhoisQuery Application.
 
 
 ## Security considerations
-  
+
 ### No external libraries to perform Whois queries
 To reduce vulnerabilities associated with external dependencies in the core service of the application, we relied solely on the default NET module from NodeJS, which provides an asynchronous network API for creating stream-based TCP servers.
 
