@@ -9,6 +9,8 @@ const router_1 = __importDefault(require("./router"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const morgan_1 = __importDefault(require("morgan"));
+const helmet_1 = __importDefault(require("helmet"));
+const helmet_config_1 = __importDefault(require("./config/helmet.config"));
 const PORT = process.env.PORT || 3001;
 const allowedOrigins = [process.env.PRODUCTION_CLIENT_URL, process.env.DEV_CLIENT_URL];
 const app = (0, express_1.default)();
@@ -23,12 +25,15 @@ app.use((0, cors_1.default)({
     },
     methods: ['GET'],
 }));
+app.use((0, helmet_1.default)(helmet_config_1.default));
+app.disable('x-powered-by'); //Hide the information about the framework used and save bandwidth
 app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.json());
 app.use(router_1.default);
 app.listen(PORT, () => {
     try {
         console.log(`🚀 Server is running at http://localhost:${PORT}`);
+        console.log(helmet_config_1.default, 'security options');
     }
     catch (err) {
         console.error("❌ Error launching server: ", err);

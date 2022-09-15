@@ -12,7 +12,7 @@ Back-end repository for a WhoisQuery Application.
 
 
 ## Security considerations
-  
+
 ### No external libraries to perform Whois queries
 To reduce vulnerabilities associated with external dependencies in the core service of the application, we relied solely on the default NET module from NodeJS, which provides an asynchronous network API for creating stream-based TCP servers.
 
@@ -23,8 +23,12 @@ We define environment variables for allowedOrigins and pass them as options on C
 On Heroku, we safely store those environment variables to be accessed in PRODUCTION.
 
 Moreover, we also define the HTTP Request methods to be allowed - for now, only GET requests are allowed, given that we are only storing queries logs on the database.
-### Server-side sanitization: 
-We validate the payload from the client against REGEX patterns to match the following conditions: 
+
+### Security Middleware and Server-side sanitization
+
+Using helmet as Middleware to set custom headers, we define custom security policies to reduce the surface and preventing against MIME-Type sniffing, Man-in-the-Middle and XSS-Cross Site Scripting attacks.
+
+We also validate the query parameters from the client against REGEX patterns to match the following conditions: 
     - The domain name shall have between 1 and 63 characters.
     - Only alphanumeric characters and hiffens (-) are acceptable.
     - Period (.) signs are allowed as long as they are not placed neither at the beginning nor at the end of the SLD. Also, we implemented sanitization against having two dots in a row;
@@ -34,3 +38,4 @@ We validate the payload from the client against REGEX patterns to match the foll
 All the controllers provide consistent error handling, using try/catch blocks, with semantical comments both for guidance over development, but also to provide contextual feedback to enhance the UX / UI, without exposing sensible information on the App architecture.
 
 ## Separation of Concerns
+In order to keep the codebase clean and maintainable, we followed separation of concerns conventions and keep separate folders and files for Controllers, Models, Utils and Configurations. 
