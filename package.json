@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-server": "tsc",
+    "build-watch": "tsc --watch",
     "start": "node build/index.js",
-    "dev-start": "tsc && nodemon build/index.js"
+    "dev-start": "nodemon build/index.js"
   },
   "repository": {
     "type": "git",
