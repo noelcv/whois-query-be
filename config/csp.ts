@@ -3,7 +3,7 @@ const CONTENT_SECURITY_POLICY: object = {
   directives: {
     defaultSrc: ["'self'"],
     scriptSrc: ["'self'"],
-    connectSrc: ["'self'"],
+    connectSrc: ["'self'", "https://*whois-query-fe.vercel.app/*"],
     baseUri: ["'self'"],
     formAction: ["'self'"],
     styleSrc: ["'self'"],
