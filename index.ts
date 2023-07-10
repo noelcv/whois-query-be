@@ -12,23 +12,29 @@ const allowedOrigins = [process.env.PRODUCTION_CLIENT_URL, process.env.DEV_CLIEN
 
 const app = Express();
 
-// app.use(cors({ 
-//   origin: function (origin, callback) {
-//     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-//       callback(null, true)
-//     } else {
-//       callback(new Error('Request origin not allowed by CORS!'))
-//     }
-//   },
-//   methods: ['GET'],
-// }
-// ));
+app.use(cors({ 
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Request origin not allowed by CORS!'))
+    }
+  },
+  methods: ['GET'],
+}
+));
 
 app.use(helmet(SECURITY_OPTIONS));
 app.disable('x-powered-by'); //Hide the information about the framework used and save bandwidth
 
 app.use(morgan("dev"));
 app.use(Express.json());
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*whois-query-fe.vercel.app")
+  next();
+})
+
 app.use(router)
 
 
