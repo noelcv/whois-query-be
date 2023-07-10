@@ -2,7 +2,7 @@ const CONTENT_SECURITY_POLICY: object = {
   useDefaults: true,
   directives: {
     defaultSrc: ["'self'", "*noelcv.vercel.app/*"],
-    scriptSrc: ["'self'"],
+    scriptSrc: ["'self'", "*noelcv.vercel.app/*"],
     connectSrc: ["'self'", "https://*noelcv.vercel.app/*"],
     baseUri: ["'self'"],
     formAction: ["'self'"],

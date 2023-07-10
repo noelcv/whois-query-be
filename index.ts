@@ -30,7 +30,10 @@ app.disable('x-powered-by'); //Hide the information about the framework used and
 app.use(morgan("dev"));
 app.use(Express.json());
 
-
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+})
 app.use(router)
 
 
