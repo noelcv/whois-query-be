@@ -1,3 +1,5 @@
 .env
 certs
 build/
+/node_modules
+node_modules
