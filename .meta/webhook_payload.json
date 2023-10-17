@@ -1,1 +1,1 @@
-{event: push,commit-msg: fix: single quotes resolver --test,sha: 6acef0142de7491218d489fbe98b20672259a3c6,author: noelcv,email: noelcv@users.noreply.github.com,repo: noelcv/whois-query-be,date: 2023-10-17T13:20:15+02:00}
+{event: push,commit-msg: fix: parser quotes resolver --test,sha: b885066422a0637717dfa772c994d499127843e3,author: noelcv,email: noelcv@users.noreply.github.com,repo: noelcv/whois-query-be,date: 2023-10-17T13:25:51+02:00}
