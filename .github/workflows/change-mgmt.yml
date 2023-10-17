@@ -67,7 +67,7 @@ jobs:
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
-          echo "${{ env.WEBHOOK_PAYLOAD }}" > .meta/webhook_payload.json
+          echo "${{ env.WEBHOOK_PAYLOAD }} | jq" > .meta/webhook_payload.json
           git add .meta/webhook_payload.json
           git commit -m "bot: automatic update of webhook payload"
           git push origin ${{ github.ref_name }} -f
