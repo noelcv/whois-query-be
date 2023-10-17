@@ -52,7 +52,7 @@ jobs:
         run: echo "IS_VERIFIED_COMMIT $IS_UNVERIFIED_COMMIT"
       - name: Create Webhook Payload for Test
         run: |
-          echo "WEBHOOK_PAYLOAD={\"event\": \"$Event\",\"commit-msg\": \"$CommitMsg\",\"sha\": \"$Sha\",\"author\": \"$Author\",\"email\": \"$Email\",\"repo\": \"$Repository\",\"date\": \"$Date\"}" >> "$GITHUB_ENV"
+          echo "WEBHOOK_PAYLOAD={\"event\": \"${Event}\",\"commit-msg\": \"${CommitMsg}\",\"sha\": \"${Sha}\",\"author\": \"${Author}\",\"email\": \"${Email}\",\"repo\": \"${Repository}\",\"date\": \"${Date}\"}" >> "$GITHUB_ENV"
         env:
           Event: ${{ github.event_name}}
           CommitMsg: ${{ github.event.head_commit.message }}
