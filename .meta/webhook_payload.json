@@ -1,1 +1,1 @@
-{"event": "push","commit-msg": "create flags for --webhook","sha": "ea127dbd22181bdffc5c28ffbb70bb3b94707208","author": "noelcv","email": "noelcv@users.noreply.github.com","repo": "noelcv/whois-query-be","date": "2023-10-17T14:04:54+02:00"}
+{"event": "push","commit-msg": "feat: add branch ref to payload --webhook","sha": "1fdf7293ded98511ed03333ef5436d0864e23a16","author": "noelcv","email": "noelcv@users.noreply.github.com","repo": "noelcv/whois-query-be","branch":"main","date": "2023-10-17T14:15:56+02:00"}
