@@ -1,0 +1,73 @@
+name: Change MGMT
+
+on:
+  push:
+    branches: ['*']
+  pull_request:
+    branches: [main]
+    types: [closed]
+
+jobs:
+  verify-commit:
+    runs-on: ubuntu-latest
+    outputs:
+      check_commit: ${{ steps.check_commit.outputs.is_unverified_commit }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Check if --no-verify flag is used
+        run: |
+          echo "COMMIT_MESSAGE=${{ github.event.head_commit.message }}" >> "$GITHUB_ENV"
+      - name: Show Commit Message
+        run: |
+          echo "${{ env.COMMIT_MESSAGE }}"
+      - name: Set Output
+        id: check_commit
+        run: |
+          if echo "${{ env.COMMIT_MESSAGE }}" | grep -qE -- "--no-verify | --test"; then
+            echo "Nice try, but you shall not pass! Tests will run before you are able to open a PR."
+            echo "is_unverified_commit=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "All good! Testing jobs will be skipped..."
+            exit 0
+          fi
+
+  create_webhook_payload:
+    needs: verify-commit
+    env:
+      IS_UNVERIFIED_COMMIT: ${{ needs.verify-commit.outputs.check_commit }}
+    if: ${{ needs.verify-commit.outputs.check_commit == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      repository-projects: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Confirm Developer Skipped Verification
+        run: echo "IS_VERIFIED_COMMIT $IS_UNVERIFIED_COMMIT"
+      - name: Create Webhook Payload for Test
+        run: |
+          echo "WEBHOOK_PAYLOAD={event: $Event,commit-msg: $CommitMsg,author: $Author,repo: $Repository}" >> "$GITHUB_ENV"
+        env:
+          Event: ${{ github.event_name}}
+          CommitMsg: ${{ github.event.head_commit.message }}
+          Author: ${{ github.actor }}
+          Repository: ${{ github.repository}}
+      - name: Print WD
+        run: pwd && ls
+      - name: Write file to disk
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          echo "${{ env.WEBHOOK_PAYLOAD }}" > .meta/webhook_payload.json
+          git add .meta/webhook_payload.json
+          git commit --amend --no-edit
+          git push origin ${{ github.ref_name }} -f
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+       
