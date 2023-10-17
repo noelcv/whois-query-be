@@ -11,7 +11,7 @@ jobs:
   verify-commit:
     runs-on: ubuntu-latest
     outputs:
-      check_commit: ${{ steps.check_commit.outputs.is_unverified_commit }}
+      check_commit: ${{ steps.check_commit.outputs.is_verified_commit }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -26,18 +26,18 @@ jobs:
       - name: Set Output
         id: check_commit
         run: |
-          if echo "${{ env.COMMIT_MESSAGE }}" | grep -qE -- "--no-verify | --test"; then
-            echo "Nice try, but you shall not pass! Tests will run before you are able to open a PR."
-            echo "is_unverified_commit=true" >> "$GITHUB_OUTPUT"
+          if echo "${{ env.COMMIT_MESSAGE }}" | grep -qE -- "--deploy | --webhook"; then
+            echo "Webhook Flag detected! Initiate payload creation..."
+            echo "is_verified_commit=true" >> "$GITHUB_OUTPUT"
           else
-            echo "All good! Testing jobs will be skipped..."
+            echo "All good! Skipping create_webhook_payload job..."
             exit 0
           fi
 
   create_webhook_payload:
     needs: verify-commit
     env:
-      IS_UNVERIFIED_COMMIT: ${{ needs.verify-commit.outputs.check_commit }}
+      IS_VERIFIED_COMMIT: ${{ needs.verify-commit.outputs.check_commit }}
     if: ${{ needs.verify-commit.outputs.check_commit == 'true' }}
     runs-on: ubuntu-latest
     permissions:
@@ -73,4 +73,4 @@ jobs:
           git push origin ${{ github.ref_name }} -f
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-       
+      
