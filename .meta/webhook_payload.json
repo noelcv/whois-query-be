@@ -1,1 +1,1 @@
-{event: push,commit-msg: jq --test,sha: 0e7b279abe34e05ae897538a4da783dcaf83dd81,author: noelcv,email: noelcv@users.noreply.github.com,repo: noelcv/whois-query-be,date: 2023-10-17T13:34:14+02:00} | jq
+{\'event\': \'push\',\'commit-msg\': \'single quotes --test\',\'sha\': \'e52f22a47a952921c693aeb5a3de134505611b99\',\'author\': \'noelcv\',\'email\': \'noelcv@users.noreply.github.com\',\'repo\': \'noelcv/whois-query-be\',\'date\': \'2023-10-17T13:42:18+02:00\'}
