@@ -52,7 +52,7 @@ jobs:
         run: echo "IS_VERIFIED_COMMIT $IS_UNVERIFIED_COMMIT"
       - name: Create Webhook Payload for Test
         run: |
-          echo "WEBHOOK_PAYLOAD={\"event\": \"${Event}\",\"commit-msg\": \"${CommitMsg}\",\"sha\": \"${Sha}\",\"author\": \"${Author}\",\"email\": \"${Email}\",\"repo\": \"${Repository}\",\"date\": \"${Date}\"}" >> "$GITHUB_ENV"
+          echo "WEBHOOK_PAYLOAD={\'event\': \'${Event}\',\'commit-msg\': \'${CommitMsg}\',\'sha\': \'${Sha}\',\'author\': \'${Author}\',\'email\': \'${Email}\',\'repo\': \'${Repository}\',\'date\': \'${Date}\'}" >> "$GITHUB_ENV"
         env:
           Event: ${{ github.event_name}}
           CommitMsg: ${{ github.event.head_commit.message }}
@@ -67,7 +67,7 @@ jobs:
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
-          echo "${{ env.WEBHOOK_PAYLOAD }} | jq" > .meta/webhook_payload.json
+          echo "${{ env.WEBHOOK_PAYLOAD }}" > .meta/webhook_payload.json
           git add .meta/webhook_payload.json
           git commit -m "bot: automatic update of webhook payload"
           git push origin ${{ github.ref_name }} -f
