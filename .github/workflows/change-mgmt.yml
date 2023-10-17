@@ -52,15 +52,15 @@ jobs:
         run: echo "IS_VERIFIED_COMMIT $IS_UNVERIFIED_COMMIT"
       - name: Create Webhook Payload for Test
         run: |
-          echo 'WEBHOOK_PAYLOAD={"event": $Event,"commit-msg": $CommitMsg,"sha": $Sha,"author": $Author,"email": $Email,"repo": $Repository,"date": $Date}' >> "$GITHUB_ENV"
+          echo 'WEBHOOK_PAYLOAD={\"event\": \"$Event\",\"commit-msg\": \"$CommitMsg\",\"sha\": \"$Sha\",\"author\": \"$Author\",\"email\": \"$Email\",\"repo\": \"$Repository\",\"date\": \"$Date\"}' >> "$GITHUB_ENV"
         env:
-          Event: "${{ github.event_name}}"
-          CommitMsg: "${{ github.event.head_commit.message }}"
-          Sha: "${{ github.event.head_commit.id }}"
-          Date: "${{ github.event.head_commit.timestamp }}"
-          Author: "${{ github.actor }}"
-          Email: "${{ github.actor }}@users.noreply.github.com"
-          Repository: "${{ github.repository}}"
+          Event: ${{ github.event_name}}
+          CommitMsg: ${{ github.event.head_commit.message }}
+          Sha: ${{ github.event.head_commit.id }}
+          Date: ${{ github.event.head_commit.timestamp }}
+          Author: ${{ github.actor }}
+          Email: ${{ github.actor }}@users.noreply.github.com
+          Repository: ${{ github.repository}}
       - name: Print WD
         run: pwd && ls
       - name: Write webhook payload to repository
