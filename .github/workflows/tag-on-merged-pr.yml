@@ -13,9 +13,6 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: lts/hydrogen
       - name: Setup GIT Config User
         run: |
          git config user.name "${{ github.actor }}"
