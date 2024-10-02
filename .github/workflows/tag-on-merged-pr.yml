@@ -47,7 +47,7 @@ jobs:
         run: npm run tag:debug
       - name: Push automated commit
         run: git push origin main
-      - name: Push tag to GitHub
+      - name: Push tag to GitHub with secret
         run: npm run tag:push
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
