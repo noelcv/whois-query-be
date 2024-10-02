@@ -19,14 +19,18 @@ jobs:
           node-version: lts/hydrogen
       - name: Setup GIT Config User
         run: |
-         git config user.name "'${{ github.actor }}'"
-         git config user.email "'${{ github.actor }}'@users.noreply.github.com"
+         git config user.name "${{ github.actor }}"
+         git config user.email "${{ github.actor }}@users.noreply.github.com"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Store last commit message
         run: |
          echo "COMMIT_MSG=${{ github.event.head_commit.message }}" >> "$GITHUB_ENV"
+         echo "LAST_COMMIT=$(git log -1 --pretty=format:'%s')" >> "$GITHUB_ENV"
       - name: Debug commit message
         run: |
           echo "${{ env.COMMIT_MSG }}"
+          echo "${{ env.LAST_COMMIT }}"
       - name: Create tag
         run: |
           if echo "${{ env.COMMIT_MSG }}" | grep -qE -- "--patch"; then
