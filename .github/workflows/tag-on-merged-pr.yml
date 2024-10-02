@@ -47,6 +47,8 @@ jobs:
         run: npm run tag:debug
       - name: Push automated commit
         run: git push origin main
+      - name: Debug ref
+        run: echo "${{ github.ref }}"
       - name: Push tag to GitHub with secret
         run: npm run tag:push
         env:
