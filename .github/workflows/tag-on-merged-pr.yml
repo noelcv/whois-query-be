@@ -24,6 +24,9 @@ jobs:
       - name: Store last commit message
         run: |
          echo "COMMIT_MSG=${{ github.event.head_commit.message }}" >> "$GITHUB_ENV"
+      - name: Debug commit message
+        run: |
+          echo "${{ env.COMMIT_MSG }}"
       - name: Create tag
         run: |
           if echo "${{ env.COMMIT_MSG }}" | grep -qE -- "--patch"; then
