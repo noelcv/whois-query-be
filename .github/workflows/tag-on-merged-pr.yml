@@ -10,7 +10,6 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     permissions:
-      packages: write
       contents: write
     steps:
       - uses: actions/checkout@v4
@@ -49,4 +48,4 @@ jobs:
       - name: Push automated commit
         run: git push origin main
       - name: Push tag to GitHub
-        run: git push --tags
+        run: npm run tag:push
