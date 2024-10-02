@@ -50,6 +50,6 @@ jobs:
       - name: Debug ref
         run: echo "${{ github.ref }}"
       - name: Push tag to GitHub with secret
-        run: npm run tag:push
+        run: npm run tag:push:ci
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
