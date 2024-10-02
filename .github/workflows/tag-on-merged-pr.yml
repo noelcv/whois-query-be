@@ -48,4 +48,4 @@ jobs:
       - name: Push automated commit
         run: git push origin main
       - name: Push tag to GitHub
-        run: git push --tags
+        run: npm run tag:push
