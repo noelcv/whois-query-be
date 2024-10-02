@@ -1,0 +1,45 @@
+name: Create Tag on Merged PR
+
+on:
+  pull_request:
+    branches: [main]
+    types: [closed]
+
+jobs:
+  create_tag_if_pr_merged:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: lts/hydrogen
+      - name: Setup GIT Config User
+        run: |
+         git config user.name "'${{ github.actor }}'"
+         git config user.email "'${{ github.actor }}'@users.noreply.github.com"
+      - name: Store last commit message
+        run: |
+         echo "COMMIT_MSG=${{ github.event.head_commit.message }}" >> "$GITHUB_ENV"
+      - name: Create tag
+        run: |
+          if echo "${{ env.COMMIT_MSG }}" | grep -qE -- "--patch"; then
+            echo "Patch tag detected. Creating patch tag..."
+            npm run semver:patch
+          elif echo "${{ env.COMMIT_MSG }}" | grep -qE -- "--minor"; then
+            echo "Minor tag detected. Creating minor tag..."
+            npm run semver:minor
+          elif echo "${{ env.COMMIT_MSG }}" | grep -qE -- "--major"; then
+            echo "Major tag detected. Creating major tag..."
+            npm run semver:major
+          else
+            echo "No semver:flag detected. Defaulting to patch tag..."
+            npm run semver:patch
+          fi
+      - name: Debug tag creation
+        run: npm run tag:debug
+      - name: Push tag to GitHub
+        run: npm run tag:push
