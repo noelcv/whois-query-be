@@ -49,3 +49,5 @@ jobs:
         run: git push origin main
       - name: Push tag to GitHub
         run: npm run tag:push
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
