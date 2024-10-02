@@ -30,26 +30,17 @@ jobs:
           echo "${{ env.LAST_COMMIT }}"
       - name: Create tag
         run: |
-          if echo "${{ env.LAST_COMMIT }}" | grep -qE -- "--patch"; then
-            echo "Patch tag detected. Creating patch tag..."
-            npm run semver:patch
-          elif echo "${{ env.LAST_COMMIT }}" | grep -qE -- "--minor"; then
-            echo "Minor tag detected. Creating minor tag..."
+          if echo "${{ env.LAST_COMMIT }}" | grep -qE -- "--minor"; then
+            echo "Minor semver flag detected. Creating minor tag..."
             npm run semver:minor
           elif echo "${{ env.LAST_COMMIT }}" | grep -qE -- "--major"; then
-            echo "Major tag detected. Creating major tag..."
+            echo "Major semver flag detected. Creating major tag..."
             npm run semver:major
           else
-            echo "No semver:flag detected. Defaulting to patch tag..."
+            echo "No semver flag detected. Defaulting to patch tag..."
             npm run semver:patch
           fi
-      - name: Debug tag creation
-        run: npm run tag:debug
       - name: Push automated commit
         run: git push origin main
-      - name: Debug ref
-        run: echo "${{ github.ref }}"
       - name: Push tag to GitHub with secret
         run: npm run tag:push:ci
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
