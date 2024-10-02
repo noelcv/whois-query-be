@@ -12,7 +12,7 @@
     "semver:minor": "npm version minor",
     "semver:major": "npm version major",
     "tag:debug": "echo $(npm version --silent | grep whois-query-be | awk '{print $2}' | sed s/,$// | sed s/\\'//g)",
-    "tag:push": "git push origin refs/tags/$(npm version --silent | grep whois-query-be | awk '{print $2}' | sed s/,$// | sed s/\\'//g):refs/heads/main",
+    "tag:push": "git push origin $(npm version --silent | grep whois-query-be | awk '{print $2}' | sed s/,$// | sed s/\\'//g):refs/heads/main",
     "dev-start": "nodemon build/index.js"
   },
   "repository": {
