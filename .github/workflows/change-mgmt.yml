@@ -1,14 +1,19 @@
 name: Change MGMT
 
 on:
-  push:
-    branches: ['*']
+  workflow_dispatch:
   pull_request:
-    branches: [main]
+    branches: [temp]
     types: [closed]
 
 jobs:
+  process_workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug current ref
+        run: echo "${{ github.ref }}"
   verify-commit:
+    needs: process_workflow
     runs-on: ubuntu-latest
     outputs:
       check_commit: ${{ steps.check_commit.outputs.is_verified_commit }}
