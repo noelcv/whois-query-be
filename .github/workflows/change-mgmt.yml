@@ -1,4 +1,4 @@
-name: Change MGMT
+name: Change MGMT triggered by workflow_dispatch
 
 on:
   workflow_dispatch:
